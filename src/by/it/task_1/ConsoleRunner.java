@@ -11,6 +11,7 @@ public class ConsoleRunner {
         for (; ; ) {
             System.out.print("Введите знак операции: ");
             String expression = scanner.nextLine();
+            expression = expression.trim();
             switch (expression) {
                 case "+":
                 case "-":
@@ -19,48 +20,53 @@ public class ConsoleRunner {
                     break;
                 default:
                     System.out.println("Вы ввели некорректный математический знак операции");
-                    return;
+                    continue;
             }
-
-            System.out.print("Введите первое число: ");
-            String firstNumber = scanner.nextLine();
-            try {
-                firstDouble = parseToDouble(firstNumber);
-            } catch (NumberFormatException e) {
-                System.out.println("Вы ввели некорректные данные!");
-                continue;
-            }
-            System.out.print("Введите второе число: ");
-            String secondNumber = scanner.nextLine();
-            try {
-                secondDouble = parseToDouble(secondNumber);
-                if (expression.equals("/") & secondDouble == 0) {
-                    System.out.println("На 0 делить нельзя!");
+            for (; ; ) {
+                System.out.print("Введите первое число: ");
+                String firstNumber = scanner.nextLine();
+                try {
+                    firstDouble = parseToDouble(firstNumber);
+                } catch (NumberFormatException e) {
+                    System.out.println("Вы ввели некорректные данные!");
                     continue;
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Вы ввели некорректные данные!");
-                continue;
+                break;
             }
-
+            for (; ; ) {
+                System.out.print("Введите второе число: ");
+                String secondNumber = scanner.nextLine();
+                try {
+                    secondDouble = parseToDouble(secondNumber);
+                    if (expression.equals("/") & secondDouble == 0) {
+                        System.out.println("На 0 делить нельзя!");
+                        continue;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Вы ввели некорректные данные!");
+                    continue;
+                }
+                break;
+            }
+            Calculator calc = new Calculator();
             switch (expression) {
                 case "+" -> {
-                    double result = add(firstDouble, secondDouble);
+                    double result = calc.add(firstDouble, secondDouble);
                     System.out.printf("Сумма чисел равна: %.2f%n", result);
                     break label;
                 }
                 case "-" -> {
-                    double result = sub(firstDouble, secondDouble);
+                    double result = calc.sub(firstDouble, secondDouble);
                     System.out.printf("Разница чисел равна: %.2f%n", result);
                     break label;
                 }
                 case "*" -> {
-                    double result = mul(firstDouble, secondDouble);
+                    double result = calc.mul(firstDouble, secondDouble);
                     System.out.printf("Произведение чисел равно: %.2f%n", result);
                     break label;
                 }
                 case "/" -> {
-                    double result = div(firstDouble, secondDouble);
+                    double result = calc.div(firstDouble, secondDouble);
                     System.out.printf("Частное чисел равно: %.2f%n", result);
                     break label;
                 }
@@ -71,21 +77,4 @@ public class ConsoleRunner {
     private static double parseToDouble(String inputNumber) throws NumberFormatException {
         return Double.parseDouble(inputNumber);
     }
-
-    private static double add(double firstDouble, double secondDouble) {
-        return firstDouble + secondDouble;
-    }
-
-    private static double sub(double firstDouble, double secondDouble) {
-        return firstDouble - secondDouble;
-    }
-
-    private static double mul(double firstDouble, double secondDouble) {
-        return firstDouble * secondDouble;
-    }
-
-    private static double div(double firstDouble, double secondDouble) {
-        return firstDouble / secondDouble;
-    }
-
 }
